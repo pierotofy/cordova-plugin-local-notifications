@@ -23,7 +23,8 @@
 
 package de.appplant.cordova.plugin.localnotification;
 
-import de.appplant.cordova.plugin.notification.*;
+import de.appplant.cordova.plugin.notification.Builder;
+import de.appplant.cordova.plugin.notification.Notification;
 import de.appplant.cordova.plugin.notification.TriggerReceiver;
 
 /**
@@ -43,8 +44,10 @@ public class ClickActivity extends de.appplant.cordova.plugin.notification.Click
     public void onClick(Notification notification) {
         LocalNotification.fireEvent("click", notification);
 
-        if (!notification.isRepeating()) {
-            LocalNotification.fireEvent("cancel", notification);
+        if (!notification.getOptions().isOngoing()) {
+            String event = notification.isRepeating() ? "clear" : "cancel";
+
+            LocalNotification.fireEvent(event, notification);
         }
 
         super.onClick(notification);
